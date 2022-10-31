@@ -1,12 +1,12 @@
-import express from 'express'
-import File from '../../file'
-import { Image } from '../../types/image'
+import express from "express"
+import File from "../../file"
+import { Image } from "../../types/image"
 
 const images: express.Router = express.Router()
 
-const validate = async (image: Image): Promise<null | string> => {
+const check = async (image: Image): Promise<null | string> => {
   if (!(await File.isImageAvailableOnOriginal(image.filename))) {
-    const availableImageNames: string = (await File.getAvailableImageNames()).join(', ')
+    const availableImageNames: string = (await File.getAvailableImageNames()).join(", ")
     return `Available images: ${availableImageNames}.`
   }
 
@@ -24,14 +24,14 @@ const validate = async (image: Image): Promise<null | string> => {
   return null
 }
 
-images.get('/', async (request: express.Request, response: express.Response): Promise<void> => {
-  const validationMessage: null | string = await validate(request.query)
+images.get("/", async (request: express.Request, response: express.Response): Promise<void> => {
+  const validationMessage: null | string = await check(request.query)
   if (validationMessage) {
     response.send(validationMessage)
     return
   }
 
-  let error: null | string = ''
+  let error: null | string = ""
 
   if (
     await File.isImageAvailableOnResized(
@@ -55,7 +55,7 @@ images.get('/', async (request: express.Request, response: express.Response): Pr
   if (path) {
     response.sendFile(path)
   } else {
-    response.send('This should not have happened :-D What did you do?')
+    response.send("This should not have happened :-D What did you do?")
   }
 })
 

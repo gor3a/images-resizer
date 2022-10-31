@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from 'express'
 import * as dotenv from 'dotenv'
-import routes from './routes/api'
+import routes from './routes/api/images'
 
 dotenv.config()
 
